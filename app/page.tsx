@@ -28,8 +28,12 @@ import {
   PromptInputTools,
   usePromptInputAttachments,
 } from '@ai-elements/prompt-input';
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, SquarePen } from 'lucide-react';
 import { PoweredByChannel3 } from '@/components/powered-by-channel3';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { Button } from '@ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@ui/tooltip';
+import { appConfig } from './app-config';
 
 function renderMessagePart(part: UIMessage['parts'][number], index: number): ReactNode {
   if (part.type === 'text') {
@@ -56,7 +60,7 @@ function ImageUploadButton() {
 }
 
 export default function Page() {
-  const { messages, sendMessage, status, error } = useChat({
+  const { messages, sendMessage, status, error, setMessages } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat' }),
   });
 
@@ -81,6 +85,11 @@ export default function Page() {
     [sendMessage],
   );
 
+  const handleNewChat = useCallback(() => {
+    // Clear all messages to start a new chat
+    setMessages([]);
+  }, [setMessages]);
+
   const isLoading = status === 'streaming' || status === 'submitted';
   const shouldShowLoader = useMemo(() => {
     if (!isLoading) return false;
@@ -91,21 +100,38 @@ export default function Page() {
   return (
     <div className="chat-container">
       <header className="chat-header">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Shopping Assistant</h1>
-          <p className="text-sm text-muted-foreground">
-            Ask for product ideas, comparisons, or gift inspiration.
-          </p>
-        </div>
         <PoweredByChannel3 />
+        <div className="chat-header-center">
+          <h1 className="text-xl font-semibold tracking-tight">{appConfig.ui.header.title}</h1>
+          <p className="text-sm text-muted-foreground">{appConfig.ui.header.subtitle}</p>
+        </div>
+        <div className="chat-header-actions">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleNewChat}
+                disabled={isLoading}
+                aria-label="New chat"
+              >
+                <SquarePen className="size-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>New chat</p>
+            </TooltipContent>
+          </Tooltip>
+          <ThemeToggle />
+        </div>
       </header>
       <div className="chat-body">
         <Conversation>
           <ConversationContent>
             {filteredMessages.length === 0 ? (
               <ConversationEmptyState
-                title="Welcome! 👋"
-                description="Start the conversation with a shopping question or ask for recommendations."
+                title={appConfig.ui.emptyState.title}
+                description={appConfig.ui.emptyState.description}
               />
             ) : (
               <>
@@ -128,7 +154,7 @@ export default function Page() {
               <PromptInputAttachments>
                 {(attachment) => <PromptInputAttachment data={attachment} />}
               </PromptInputAttachments>
-              <PromptInputTextarea placeholder="Ask for advice on what to buy…" />
+              <PromptInputTextarea placeholder={appConfig.ui.input.placeholder} />
             </PromptInputBody>
             <PromptInputFooter>
               <PromptInputTools>

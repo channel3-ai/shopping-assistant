@@ -1,6 +1,7 @@
 import { ToolLoopAgent, createAgentUIStreamResponse } from 'ai';
 
-import { chatAgent, chatAgentInstructions } from '@/agent/chat-agent';
+import { appConfig } from '@/app/app-config';
+import { chatAgent } from '@/agent/chat-agent';
 import { getLanguageModel } from '@/lib/lm';
 
 export const runtime = 'edge';
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
       ? chatAgent
       : new ToolLoopAgent({
           model: getLanguageModel(requestedModel),
-          instructions: chatAgentInstructions,
+          instructions: appConfig.agent.instructions,
         });
 
   return createAgentUIStreamResponse({

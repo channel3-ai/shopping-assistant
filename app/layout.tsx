@@ -1,6 +1,8 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { appConfig } from "./app-config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,17 +15,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shopping Assistant - AI-Powered Shopping Recommendations",
-  description: "Get personalized product ideas, comparisons, and gift inspiration with our AI shopping assistant.",
+  title: appConfig.metadata.title,
+  description: appConfig.metadata.description,
+  icons: {
+    icon: "/channel3-logo-small-dark.svg",
+  },
+};
+
+const themeStyle: CSSProperties = {
+  ...Object.entries(appConfig.theme.light).reduce<Record<string, string>>(
+    (vars, [token, value]) => {
+      vars[`--theme-light-${token}`] = value;
+      return vars;
+    },
+    {},
+  ),
+  ...Object.entries(appConfig.theme.dark).reduce<Record<string, string>>(
+    (vars, [token, value]) => {
+      vars[`--theme-dark-${token}`] = value;
+      return vars;
+    },
+    {},
+  ),
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode | React.ReactElement;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={themeStyle}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
