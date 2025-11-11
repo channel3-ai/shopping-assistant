@@ -176,7 +176,7 @@ export default function Page() {
         <PoweredByChannel3 />
         <div className="chat-header-center">
           <h1 className="text-xl font-semibold tracking-tight">{appConfig.ui.header.title}</h1>
-          <p className="text-sm text-muted-foreground">{appConfig.ui.header.subtitle}</p>
+          <p className="text-sm opacity-75">{appConfig.ui.header.subtitle}</p>
         </div>
         <div className="chat-header-actions">
           <Tooltip>
@@ -221,22 +221,22 @@ export default function Page() {
             )}
           </ConversationContent>
         </Conversation>
-        <div className="chat-input-wrapper">
-          <PromptInput onSubmit={handleSubmit} accept="image/*" multiple>
-            <PromptInputBody>
-              <PromptInputAttachments>
-                {(attachment) => <PromptInputAttachment data={attachment} />}
-              </PromptInputAttachments>
-              <PromptInputTextarea placeholder={appConfig.ui.input.placeholder} />
-            </PromptInputBody>
-            <PromptInputFooter>
-              <PromptInputTools>
-                <ImageUploadButton />
-              </PromptInputTools>
-              <PromptInputSubmit status={status} />
-            </PromptInputFooter>
-          </PromptInput>
-        </div>
+      </div>
+      <div className="chat-input-wrapper">
+        <PromptInput onSubmit={handleSubmit} accept="image/*" multiple>
+          <PromptInputBody>
+            <PromptInputAttachments>
+              {(attachment) => <PromptInputAttachment data={attachment} />}
+            </PromptInputAttachments>
+            <PromptInputTextarea placeholder={appConfig.ui.input.placeholder} />
+          </PromptInputBody>
+          <PromptInputFooter>
+            <PromptInputTools>
+              <ImageUploadButton />
+            </PromptInputTools>
+            <PromptInputSubmit status={status} />
+          </PromptInputFooter>
+        </PromptInput>
       </div>
       <ProductDetailsPanel
         isOpen={isProductPanelOpen}

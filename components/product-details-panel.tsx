@@ -31,11 +31,10 @@ export function ProductDetailsPanel({
   productId,
 }: ProductDetailsPanelProps) {
   const [panelState, setPanelState] = useState<PanelState>('idle');
-  const [product, setProduct] = useState<Channel3Product | null>(
-    initialProduct ?? null,
-  );
+  const [product, setProduct] = useState<Channel3Product | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [shouldRender, setShouldRender] = useState(false);
+  const [shouldSlideIn, setShouldSlideIn] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -44,20 +43,24 @@ export function ProductDetailsPanel({
   }, [isOpen]);
 
   useEffect(() => {
+    if (isOpen && (panelState === 'success' || panelState === 'error')) {
+      // Small delay to ensure the DOM is ready for the transition
+      const timer = setTimeout(() => {
+        setShouldSlideIn(true);
+      }, 10);
+      return () => clearTimeout(timer);
+    } else if (!isOpen) {
+      setShouldSlideIn(false);
+    }
+  }, [isOpen, panelState]);
+
+  useEffect(() => {
     if (!shouldRender) {
       setProduct(null);
       setPanelState('idle');
       setErrorMessage(null);
     }
   }, [shouldRender]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    setProduct(initialProduct ?? null);
-  }, [initialProduct, isOpen, productId]);
 
   useEffect(() => {
     if (!isOpen || !productId) {
@@ -88,10 +91,7 @@ export function ProductDetailsPanel({
         const detail = await response.json();
         if (cancelled) return;
 
-        setProduct((previous) => ({
-          ...(previous ?? {}),
-          ...detail,
-        }));
+        setProduct(detail);
         setPanelState('success');
       } catch (error) {
         if (cancelled) return;
@@ -139,10 +139,13 @@ export function ProductDetailsPanel({
   );
 
   const handlePanelTransitionEnd = useCallback(() => {
-    if (!isOpen) {
+    if (!shouldSlideIn) {
       setShouldRender(false);
+      setProduct(null);
+      setPanelState('idle');
+      setErrorMessage(null);
     }
-  }, [isOpen]);
+  }, [shouldSlideIn]);
 
   const handleVariantClick = useCallback(
     async (variant: Channel3Variant) => {
@@ -211,14 +214,14 @@ export function ProductDetailsPanel({
       <div
         className={cn(
           'absolute inset-0 bg-background/70 backdrop-blur-sm transition-opacity duration-300 ease-out pointer-events-auto',
-          isOpen ? 'opacity-100' : 'opacity-0',
+          shouldSlideIn ? 'opacity-100' : 'opacity-0',
         )}
         onClick={handleBackdropClick}
       />
       <aside
         className={cn(
           'pointer-events-auto absolute inset-y-0 right-0 flex h-full w-full max-w-[440px] transform flex-col bg-background shadow-2xl transition-transform duration-300 ease-out sm:max-w-[480px]',
-          isOpen ? 'translate-x-0' : 'translate-x-full',
+          shouldSlideIn ? 'translate-x-0' : 'translate-x-full',
         )}
         onTransitionEnd={handlePanelTransitionEnd}
         role="dialog"

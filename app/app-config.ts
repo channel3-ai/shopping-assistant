@@ -1,68 +1,76 @@
 export const appConfig = {
   // Metadata values for the browser tab + SEO.
   metadata: {
-    title: 'Style Studio - Personal Fashion Advisor',
+    title: 'Gift Genius - Your Holiday Gift Assistant',
     description:
-      'Get expert fashion advice and personalized styling recommendations from your personal fashion advisor.',
+      'Find the perfect gifts for everyone on your list with personalized recommendations from your holiday gift expert.',
   },
   // UI copy used across the chat interface.
   ui: {
     // Text content for the header section at the top of the chat.
     header: {
-      title: 'Style Studio',
-      subtitle: 'Your personal fashion advisor',
+      title: 'Gift Genius',
+      subtitle: 'Your personal holiday gift expert',
     },
     // Default empty state shown before the conversation begins.
     emptyState: {
-      title: 'Welcome to Your Style Studio ✨',
+      title: 'Find the Perfect Gift 🎁',
       description:
-        'Tell me about your style preferences, the occasion, or what you\'re looking for. I\'m here to help you find pieces that match your aesthetic.',
+        'Tell me about the person you\'re shopping for—their interests, hobbies, age, or the occasion. I\'ll help you discover thoughtful gifts they\'ll love.',
     },
     // Placeholder text displayed inside the prompt input.
     input: {
-      placeholder: 'Describe your style or what you\'re looking for…',
+      placeholder: 'Who are you shopping for? Tell me about them…',
     },
   },
   // System instructions provided to the AI agent.
   agent: {
     instructions:
-      'You are an experienced fashion stylist and personal shopping advisor. You have expertise in clothing, accessories, trends, fabrics, fit, and style aesthetics. Ask thoughtful questions about body type, style preferences (minimalist, maximalist, classic, trendy, etc.), occasions, and budget. Provide specific recommendations with reasoning about why pieces work together, how to style them, and what makes them versatile. Consider factors like seasonality, color palettes, silhouettes, and quality. Be encouraging and help clients develop confidence in their personal style. Keep responses insightful but concise.',
+      'You are an expert gift consultant specializing in helping people find thoughtful, personalized gifts for any occasion. Ask insightful questions about the recipient\'s interests, hobbies, age, relationship to the gift-giver, and the occasion (holiday, birthday, anniversary, etc.). Consider their personality, lifestyle, current trends, and what might be meaningful to them. Suggest a range of options across different price points and explain why each gift would be a good match. Think about practical gifts, experiential gifts, personalized items, and unique finds. Help users avoid generic gifts and find something that shows real thought and care. Be enthusiastic, creative, and help take the stress out of gift-giving. Keep recommendations specific and well-reasoned but concise.',
   },
   // Theme colors, light vs dark matches the user's system preference
   theme: {
     light: {
-      background: '#fafafa',
-      foreground: '#18181b',
+      background: '#f0f9ff',
+      foreground: '#0c4a6e',
       card: '#ffffff',
-      cardForeground: '#18181b',
-      primary: '#18181b',
-      primaryForeground: '#fafafa',
-      secondary: '#f4f4f5',
-      secondaryForeground: '#18181b',
-      accent: '#e4e4e7',
-      accentForeground: '#18181b',
-      muted: '#f4f4f5',
-      mutedForeground: '#71717a',
-      border: '#e4e4e7',
-      input: '#e4e4e7',
-      ring: '#18181b',
+      cardForeground: '#0c4a6e',
+      primary: '#0284c7',
+      primaryForeground: '#f0f9ff',
+      secondary: '#e0f2fe',
+      secondaryForeground: '#075985',
+      accent: '#bae6fd',
+      accentForeground: '#075985',
+      muted: '#f1f5f9',
+      mutedForeground: '#64748b',
+      border: '#bae6fd',
+      input: '#e0f2fe',
+      inputBackground: '#ffffff',
+      ring: '#0ea5e9',
+      header: '#ffffff',
+      headerForeground: '#0c4a6e',
+      headerBorder: '#bae6fd',
     },
     dark: {
-      background: '#09090b',
-      foreground: '#fafafa',
-      card: '#18181b',
-      cardForeground: '#fafafa',
-      primary: '#fafafa',
-      primaryForeground: '#09090b',
-      secondary: '#27272a',
-      secondaryForeground: '#fafafa',
-      accent: '#3f3f46',
-      accentForeground: '#fafafa',
-      muted: '#27272a',
-      mutedForeground: '#a1a1aa',
-      border: '#27272a',
-      input: '#27272a',
-      ring: '#fafafa',
+      background: '#020617',
+      foreground: '#e0f2fe',
+      card: '#0f172a',
+      cardForeground: '#e0f2fe',
+      primary: '#38bdf8',
+      primaryForeground: '#020617',
+      secondary: '#1e293b',
+      secondaryForeground: '#e0f2fe',
+      accent: '#334155',
+      accentForeground: '#bae6fd',
+      muted: '#1e293b',
+      mutedForeground: '#94a3b8',
+      border: '#334155',
+      input: '#1e293b',
+      inputBackground: '#0f172a',
+      ring: '#38bdf8',
+      header: '#0f172a',
+      headerForeground: '#e0f2fe',
+      headerBorder: '#334155',
     },
   },
 } as const;

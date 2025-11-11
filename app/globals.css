@@ -23,6 +23,7 @@
   --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
+  --color-input-background: var(--input-background);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
@@ -37,6 +38,9 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-header: var(--header);
+  --color-header-foreground: var(--header-foreground);
+  --color-header-border: var(--header-border);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -62,7 +66,11 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--theme-light-border);
   --input: var(--theme-light-input);
+  --input-background: var(--theme-light-inputBackground);
   --ring: var(--theme-light-ring);
+  --header: var(--theme-light-header);
+  --header-foreground: var(--theme-light-headerForeground);
+  --header-border: var(--theme-light-headerBorder);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -79,35 +87,41 @@
   
   /* Chat content padding */
   --chat-padding: 1rem;
+  --chat-bottom-spacing: 10rem;
 }
 
 @media (min-width: 640px) {
   :root {
     --chat-padding: 2rem;
+    --chat-bottom-spacing: 12rem;
   }
 }
 
 @media (min-width: 768px) {
   :root {
     --chat-padding: 4rem;
+    --chat-bottom-spacing: 14rem;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
     --chat-padding: 8rem;
+    --chat-bottom-spacing: 16rem;
   }
 }
 
 @media (min-width: 1280px) {
   :root {
     --chat-padding: 12rem;
+    --chat-bottom-spacing: 18rem;
   }
 }
 
 @media (min-width: 1536px) {
   :root {
     --chat-padding: 16rem;
+    --chat-bottom-spacing: 20rem;
   }
 }
 
@@ -129,7 +143,11 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: var(--theme-dark-border);
   --input: var(--theme-dark-input);
+  --input-background: var(--theme-dark-inputBackground);
   --ring: var(--theme-dark-ring);
+  --header: var(--theme-dark-header);
+  --header-foreground: var(--theme-dark-headerForeground);
+  --header-border: var(--theme-dark-headerBorder);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -161,7 +179,10 @@
   }
 
   .chat-header {
-    @apply grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-6 py-4;
+    @apply grid grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4;
+    background-color: var(--header);
+    color: var(--header-foreground);
+    border-bottom: 1px solid var(--header-border);
   }
 
   .chat-header-center {
@@ -189,13 +210,18 @@
   }
 
   .chat-body {
-    @apply flex flex-1 flex-col overflow-hidden;
+    @apply relative flex flex-1 flex-col overflow-hidden;
   }
 
   .chat-input-wrapper {
-    @apply border-t py-4;
+    @apply absolute bottom-0 left-0 right-0 py-4 pointer-events-none z-20;
     padding-left: var(--chat-padding);
     padding-right: var(--chat-padding);
+  }
+
+  .chat-input-wrapper > * {
+    @apply pointer-events-auto;
+    background-color: var(--input-background);
   }
 
   /* Smaller input with tighter spacing */

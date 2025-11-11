@@ -29,7 +29,11 @@ export const ConversationContent = ({
 }: ConversationContentProps) => (
   <StickToBottom.Content
     className={cn("flex flex-col gap-8 py-4", className)}
-    style={{ paddingLeft: 'var(--chat-padding)', paddingRight: 'var(--chat-padding)' }}
+    style={{ 
+      paddingLeft: 'var(--chat-padding)', 
+      paddingRight: 'var(--chat-padding)',
+      paddingBottom: 'var(--chat-bottom-spacing)'
+    }}
     {...props}
   />
 );
@@ -50,18 +54,19 @@ export const ConversationEmptyState = ({
 }: ConversationEmptyStateProps) => (
   <div
     className={cn(
-      "flex size-full flex-col items-center justify-center gap-3 p-8 text-center",
+      "absolute inset-0 flex flex-col items-center justify-center gap-3 p-8 text-center",
       className
     )}
+    style={{ transform: 'translateY(-15%)' }}
     {...props}
   >
     {children ?? (
       <>
         {icon && <div className="text-muted-foreground">{icon}</div>}
-        <div className="space-y-1">
-          <h3 className="font-medium text-sm">{title}</h3>
+        <div className="space-y-2">
+          <h3 className="font-semibold text-2xl">{title}</h3>
           {description && (
-            <p className="text-muted-foreground text-sm">{description}</p>
+            <p className="text-muted-foreground text-base max-w-md mx-auto">{description}</p>
           )}
         </div>
       </>
