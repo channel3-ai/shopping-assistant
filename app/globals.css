@@ -139,6 +139,16 @@
     @apply border-t px-6 py-4;
   }
 
+  /* Smaller input with tighter spacing */
+  .chat-input-wrapper [data-slot="input-group-control"] {
+    @apply max-h-32 min-h-12 py-2;
+  }
+
+  /* Message attachments display */
+  .chat-body [role="article"] > div {
+    @apply flex flex-wrap gap-2;
+  }
+
   /* Error Display */
   .error-message {
     @apply rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive;

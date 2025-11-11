@@ -1,0 +1,81 @@
+# Shopping Assistant - Cursor Rules
+
+## Tech Stack
+- **Next.js 16** with App Router
+- **React 19.2** with TypeScript (strict mode)
+- **AI SDK** (@ai-sdk/react v3, ai v6 beta)
+- **Tailwind CSS v4**
+- **Vercel AI Elements** for all AI UI components
+
+## Golden Rule: Use Vercel AI Elements
+
+**Never build custom chat UI - always use Vercel's pre-built components!**
+
+### Available Component Libraries
+- `@ai-elements/*` - AI-specific UI components (conversation, messages, prompts, etc.)
+- `@ui/*` - General Radix UI components (buttons, dialogs, etc.)
+
+### Key Patterns
+- ✅ Use `Conversation` for scrolling (not ScrollArea)
+- ✅ Use `MessageResponse` for text (renders markdown)
+- ✅ Use `ConversationEmptyState` for empty states
+- ✅ Import from `@ai-elements/*` for all AI UI needs
+
+## Code Style
+
+### TypeScript
+- Strict typing, avoid `any` (add `eslint-disable` comment if needed)
+- Use indexed access types: `UIMessage['parts'][number]`
+- Import types: `import type` or `import { type X }`
+
+### React
+- Use `'use client'` for interactive components
+- Function declarations over arrow functions
+- Memoize with `useCallback` and `useMemo`
+
+### Styling
+- **Semantic CSS classes** in `globals.css` with `@layer components`
+- Prefer `.chat-container` over long Tailwind strings
+- Kebab-case: `chat-header`, `error-message`
+- Inline Tailwind only for one-off styles
+
+### Import Aliases
+- `@/*` → root
+- `@ai-elements/*` → components/ai-elements/*
+- `@ui/*` → components/ui/*
+
+## AI SDK Patterns
+
+### useChat Setup
+```typescript
+const { messages, sendMessage, status, error } = useChat({
+  transport: new DefaultChatTransport({ api: '/api/chat' }),
+});
+```
+
+### Agent Configuration
+```typescript
+import { ToolLoopAgent } from 'ai';
+
+export const chatAgent = new ToolLoopAgent({
+  model: getLanguageModel(process.env.LLM_MODEL),
+  instructions: 'Your instructions...',
+});
+```
+
+## Quick Checklist
+- [ ] Using Vercel AI Elements (not custom UI)
+- [ ] `MessageResponse` for text (markdown support)
+- [ ] `Conversation` for scrolling (not ScrollArea)
+- [ ] Imports use path aliases
+- [ ] Callbacks memoized
+- [ ] TypeScript strict
+- [ ] `'use client'` on interactive components
+
+## Common Mistakes
+- ❌ Building custom chat UI → Use AI Elements
+- ❌ Plain `<p>` for messages → Use `MessageResponse`
+- ❌ Using `ScrollArea` → Use `Conversation`
+- ❌ Long Tailwind strings → Use semantic CSS
+- ❌ Forgetting `'use client'`
+- ❌ Committing `.env` files

@@ -413,7 +413,7 @@ export const PromptInputActionAddAttachments = ({
   );
 };
 
-export type PromptInputMessage = UseChatHelpers<never>["sendMessage"];
+export type PromptInputMessage = Parameters<UseChatHelpers<never>["sendMessage"]>[0];
 
 export type PromptInputProps = Omit<
   HTMLAttributes<HTMLFormElement>,
@@ -706,7 +706,7 @@ export const PromptInput = ({
       })
     ).then((convertedFiles: FileUIPart[]) => {
       try {
-        const result = onSubmit({ text, files: convertedFiles }, event);
+        const result = onSubmit({ text, files: convertedFiles } as PromptInputMessage, event);
 
         // Handle both sync and async onSubmit
         if (result instanceof Promise) {
