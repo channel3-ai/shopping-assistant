@@ -1,5 +1,8 @@
 # Shopping Assistant - Cursor Rules
 
+## Never write random .MD docs
+After completing a task, do not write a .md guide summarizing anything.
+
 ## Tech Stack
 - **Next.js 16** with App Router
 - **React 19.2** with TypeScript (strict mode)

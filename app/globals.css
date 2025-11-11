@@ -76,6 +76,39 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  
+  /* Chat content padding */
+  --chat-padding: 1rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --chat-padding: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --chat-padding: 4rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --chat-padding: 8rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --chat-padding: 12rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --chat-padding: 16rem;
+  }
 }
 
 .dark {
@@ -160,7 +193,9 @@
   }
 
   .chat-input-wrapper {
-    @apply border-t px-6 py-4;
+    @apply border-t py-4;
+    padding-left: var(--chat-padding);
+    padding-right: var(--chat-padding);
   }
 
   /* Smaller input with tighter spacing */
@@ -176,5 +211,10 @@
   /* Error Display */
   .error-message {
     @apply rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive;
+  }
+
+  /* Product Display */
+  .product-card-image {
+    @apply h-full w-full object-cover transition-transform duration-300 hover:scale-105;
   }
 }

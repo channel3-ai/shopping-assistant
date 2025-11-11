@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useCallback, useMemo } from 'react';
+import { type ReactNode, useCallback, useMemo, useState } from 'react';
 import { DefaultChatTransport, type UIMessage } from 'ai';
 import { useChat } from '@ai-sdk/react';
 
@@ -31,18 +31,78 @@ import {
 import { ImageIcon, SquarePen } from 'lucide-react';
 import { PoweredByChannel3 } from '@/components/powered-by-channel3';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { ProductCarousel, type ProductCarouselProps } from '@/components/product-carousel';
+import { ProductDetailsPanel } from '@/components/product-details-panel';
+import type { Channel3Product } from '@/agent/tools/channel3';
 import { Button } from '@ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@ui/tooltip';
 import { appConfig } from './app-config';
 
-function renderMessagePart(part: UIMessage['parts'][number], index: number): ReactNode {
+function renderMessageParts(
+  parts: UIMessage['parts'],
+  onProductClick?: (product: Channel3Product) => void,
+): ReactNode[] {
+  const renderedParts: ReactNode[] = [];
+  const aggregatedProducts: ProductCarouselProps['products'] = [];
+
+  parts.forEach((part, index) => {
   if (part.type === 'text') {
-    return <MessageResponse key={index}>{part.text}</MessageResponse>;
+      renderedParts.push(
+        <MessageResponse key={`text-${index}`}>{part.text}</MessageResponse>,
+      );
+      return;
   }
+
   if (part.type === 'file') {
-    return <MessageAttachment key={index} data={part} />;
+      renderedParts.push(<MessageAttachment key={`file-${index}`} data={part} />);
+      return;
   }
-  return null;
+
+  if (part.type === 'tool-searchProducts') {
+    if (part.state === 'output-available') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const output = part.output as any;
+      if (Array.isArray(output) && output.length > 0) {
+          aggregatedProducts.push(...output);
+        }
+        return;
+      }
+
+    if (part.state === 'input-available') {
+        renderedParts.push(
+          <div key={`search-loading-${index}`} className="text-sm text-muted-foreground">
+          Searching products...
+          </div>,
+      );
+    }
+      return;
+    }
+  });
+
+  if (aggregatedProducts.length > 0) {
+    const dedupedProducts: ProductCarouselProps['products'] = [];
+    const seen = new Set<string>();
+
+    aggregatedProducts.forEach((product, index) => {
+      const identifier =
+        product.id ?? `${product.title ?? 'product'}-${index.toString()}`;
+      if (seen.has(identifier)) {
+        return;
+      }
+      seen.add(identifier);
+      dedupedProducts.push(product);
+    });
+
+    renderedParts.push(
+      <ProductCarousel
+        key="searchProducts"
+        products={dedupedProducts}
+        onProductClick={onProductClick}
+      />,
+    );
+  }
+
+  return renderedParts;
 }
 
 function ErrorDisplay({ message }: { message: string }) {
@@ -63,6 +123,8 @@ export default function Page() {
   const { messages, sendMessage, status, error, setMessages } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat' }),
   });
+  const [selectedProduct, setSelectedProduct] = useState<Channel3Product | null>(null);
+  const [isProductPanelOpen, setIsProductPanelOpen] = useState(false);
 
   const filteredMessages = useMemo(
     () => messages.filter((message) => message.role !== 'system'),
@@ -88,7 +150,18 @@ export default function Page() {
   const handleNewChat = useCallback(() => {
     // Clear all messages to start a new chat
     setMessages([]);
+    setSelectedProduct(null);
+    setIsProductPanelOpen(false);
   }, [setMessages]);
+
+  const handleProductSelect = useCallback((product: Channel3Product) => {
+    setSelectedProduct(product);
+    setIsProductPanelOpen(true);
+  }, []);
+
+  const handleProductPanelClose = useCallback(() => {
+    setIsProductPanelOpen(false);
+  }, []);
 
   const isLoading = status === 'streaming' || status === 'submitted';
   const shouldShowLoader = useMemo(() => {
@@ -138,7 +211,7 @@ export default function Page() {
                 {filteredMessages.map((message) => (
                   <Message key={message.id} from={message.role}>
                     <MessageContent>
-                      {message.parts.map(renderMessagePart)}
+                      {renderMessageParts(message.parts, handleProductSelect)}
                     </MessageContent>
                   </Message>
                 ))}
@@ -165,6 +238,12 @@ export default function Page() {
           </PromptInput>
         </div>
       </div>
+      <ProductDetailsPanel
+        isOpen={isProductPanelOpen}
+        onClose={handleProductPanelClose}
+        productId={selectedProduct?.id ?? null}
+        initialProduct={selectedProduct}
+      />
     </div>
   );
 }

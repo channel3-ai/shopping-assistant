@@ -17,6 +17,9 @@ importers:
       '@ai-sdk/react':
         specifier: 3.0.0-beta.98
         version: 3.0.0-beta.98(react@19.2.0)(zod@4.1.12)
+      '@channel3/sdk':
+        specifier: ^2.3.0
+        version: 2.3.0
       '@radix-ui/react-collapsible':
         specifier: ^1.1.12
         version: 1.1.12(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -264,6 +267,9 @@ packages:
 
   '@braintree/sanitize-url@7.1.1':
     resolution: {integrity: sha512-i1L7noDNxtFyL5DmZafWy1wRVhGehQmzZaz1HiN5e7iylJMSZR7ekOV7NsIqa5qBldlLrsKv4HbgFUVlQrz8Mw==}
+
+  '@channel3/sdk@2.3.0':
+    resolution: {integrity: sha512-1jhNuN4b3Evc9kQLQ60yg4wbVfA4m+cdDE7RI2sIohoHHa0X4e62XW5qRVIUHqKDQx4UYmM4ANTIg498lWmsoQ==}
 
   '@chevrotain/cst-dts-gen@11.0.3':
     resolution: {integrity: sha512-BvIKpRLeS/8UbfxXxgC33xOumsacaeCKAjAeLyOn7Pcp95HiRbrpl14S+9vaZLolnbssPIUuiUd8IvgkRyt6NQ==}
@@ -3939,6 +3945,8 @@ snapshots:
       '@babel/helper-validator-identifier': 7.28.5
 
   '@braintree/sanitize-url@7.1.1': {}
+
+  '@channel3/sdk@2.3.0': {}
 
   '@chevrotain/cst-dts-gen@11.0.3':
     dependencies:

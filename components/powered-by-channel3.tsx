@@ -20,4 +20,3 @@ export function PoweredByChannel3() {
     </a>
   );
 }
-
