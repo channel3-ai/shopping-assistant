@@ -120,3 +120,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* Chat Layout */
+  .chat-container {
+    @apply flex h-screen w-screen flex-col;
+  }
+
+  .chat-header {
+    @apply border-b px-6 py-4;
+  }
+
+  .chat-body {
+    @apply flex flex-1 flex-col overflow-hidden;
+  }
+
+  .chat-input-wrapper {
+    @apply border-t px-6 py-4;
+  }
+
+  /* Error Display */
+  .error-message {
+    @apply rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive;
+  }
+}
