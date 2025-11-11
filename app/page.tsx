@@ -29,6 +29,7 @@ import {
   usePromptInputAttachments,
 } from '@ai-elements/prompt-input';
 import { ImageIcon } from 'lucide-react';
+import { PoweredByChannel3 } from '@/components/powered-by-channel3';
 
 function renderMessagePart(part: UIMessage['parts'][number], index: number): ReactNode {
   if (part.type === 'text') {
@@ -90,10 +91,13 @@ export default function Page() {
   return (
     <div className="chat-container">
       <header className="chat-header">
-        <h1 className="text-xl font-semibold tracking-tight">Shopping Assistant</h1>
-        <p className="text-sm text-muted-foreground">
-          Ask for product ideas, comparisons, or gift inspiration.
-        </p>
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight">Shopping Assistant</h1>
+          <p className="text-sm text-muted-foreground">
+            Ask for product ideas, comparisons, or gift inspiration.
+          </p>
+        </div>
+        <PoweredByChannel3 />
       </header>
       <div className="chat-body">
         <Conversation>
