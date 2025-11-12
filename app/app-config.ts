@@ -34,6 +34,22 @@ export const appConfig = {
       generic gifts and find something that shows real thought and care. Be enthusiastic, creative, and help take the stress 
       out of gift-giving. Keep recommendations specific and well-reasoned but concise.`,
   },
+  // Channel3 search filters - automatically applied to all searches
+  search: {
+    filters: {
+      // brand_ids: null, // Array of brand IDs to filter by
+      // gender: null, // 'male', 'female', or 'unisex'
+      // condition: null, // 'new', 'refurbished', or 'used'
+      // price: {
+      //   min_price: null, // Minimum price in dollars and cents
+      //   max_price: null, // Maximum price in dollars and cents
+      // },
+      availability: ['InStock', 'LimitedAvailability', 'PreOrder'], // Only show available products
+      // website_ids: null, // Array of website IDs to filter by
+      // category_ids: null, // Array of category IDs to filter by
+      // exclude_product_ids: null, // Array of product IDs to exclude
+    },
+  },
   // Theme colors, light vs dark matches the user's system preference
   theme: {
     light: {
