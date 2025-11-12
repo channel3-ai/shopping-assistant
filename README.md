@@ -1,65 +1,162 @@
-# Shopping Assistant Chatbot
+# Shopping Assistant with Channel3
 
-Minimal, forkable chatbot built with Next.js, Vercel AI SDK 6 (beta), and Vercel AI Gateway. The UI reuses AI Elements (`@ai-elements/*`) and shadcn/ui (`@ui/*`) components so teams can extend the experience without rebuilding core primitives.
+A simple AI chatbot built with Next.js and the Vercel AI SDK that uses [Channel3](https://trychannel3.com) for real-time product search. Ask about products in natural language, and the bot will search Channel3's catalog and display results in an interactive carousel.
 
-- Streaming chat powered by a configurable OpenAI-compatible model (default: `gpt-5-chat-latest`)
-- Optional routing through Vercel AI Gateway via `OPENAI_BASE_URL`
-- Runs on the Edge (`app/api/chat/route.ts`) for low-latency responses
-- No auth or persistent history—state lives in the browser session
+![Chat Interface](public/chat-interface.png)
+
+**Key Features:**
+- 🛍️ Natural language product search powered by Channel3
+- 💬 Streaming chat responses using AI SDK 6 (beta)
+- 🎨 Beautiful UI with AI Elements and shadcn/ui components
+- ⚡ Fast Edge runtime for low-latency responses
+
+## Screenshots
+
+### Product Search Results
+Ask about any product and see results displayed in an interactive carousel:
+
+![Product Carousel](public/product-carousel.png)
+
+### Product Details
+Click any product to view detailed information, pricing, variants, and more:
+
+![Product Details](public/product-details.png)
 
 ## Prerequisites
 
-- Node.js 18.18+ (the project targets the version range required by Next.js 16)
-- [`pnpm`](https://pnpm.io/) (recommended) or another Node package manager
-- An API key for an OpenAI-compatible provider (e.g., Vercel AI Gateway)
+- **Node.js 18.18+** (required for Next.js 16)
+- **[pnpm](https://pnpm.io/)** (or npm/yarn)
+- **API Keys:**
+  - [Channel3 API key](https://trychannel3.com) for product search
+  - LLM provider API key (Anthropic, OpenAI, xAI, or Groq)
 
-## Setup
+## Quick Start
 
-1. Install dependencies:
+### 1. Install Dependencies
 
-   ```bash
-   pnpm install
-   ```
+```bash
+pnpm install
+```
 
-2. Copy the example env file and fill in your values:
+### 2. Configure Environment Variables
 
-   ```bash
-   cp .env.example .env.local
-   ```
+Copy `.env.example` to `.env.local`:
 
-   | Variable            | Required | Description                                                                 |
-   | ------------------- | -------- | --------------------------------------------------------------------------- |
-   | `ANTHROPIC_API_KEY` | ✅       | Your Anthropic API key for Claude models.                                  |
-   | `LLM_MODEL`         | ✅       | Claude model id (e.g., `claude-3-5-sonnet-latest`, `claude-opus-4-1`).    |
+```bash
+cp .env.example .env.local
+```
 
-3. Start the dev server:
+Then add your API keys:
 
-   ```bash
-   pnpm dev
-   ```
+| Variable            | Required | Description                                                                 |
+| ------------------- | -------- | --------------------------------------------------------------------------- |
+| `CHANNEL3_API_KEY`  | ✅       | Your Channel3 API key ([get one here](https://trychannel3.com))           |
+| `LLM_API_KEY`       | ✅       | API key for your LLM provider (e.g., Anthropic, OpenAI)                   |
+| `LLM_MODEL`         | ✅       | Model identifier (e.g., `claude-3-5-sonnet-latest`, `gpt-4o`)             |
 
-4. Visit [http://localhost:3000](http://localhost:3000) and start chatting.
+### 3. Select Your LLM Provider
+
+Open `lib/lm.ts` and uncomment your preferred LLM provider:
+
+```typescript
+// Choose ONE of the following:
+return createAnthropic({ apiKey: process.env.LLM_API_KEY })(modelId);
+// return createOpenAI({ apiKey: process.env.LLM_API_KEY })(modelId);
+// return xai(modelId);
+// return groq(modelId);
+```
+
+Make sure your `LLM_API_KEY` and `LLM_MODEL` in `.env.local` match your chosen provider.
+
+### 4. Configure Your Agent (Optional)
+
+Customize the agent's behavior, UI text, and search filters in `app/app-config.ts`:
+
+```typescript
+export const appConfig = {
+  metadata: {
+    title: 'Your App Title',
+    description: 'Your app description',
+  },
+  ui: {
+    emptyState: {
+      title: 'Your Agent Name',
+      description: 'Your welcome message...',
+    },
+    input: {
+      placeholder: 'Your input placeholder...',
+    },
+  },
+  agent: {
+    instructions: 'Your agent personality and instructions...',
+  },
+  search: {
+    filters: {
+      // Add Channel3 search filters here
+      availability: ['InStock', 'PreOrder'],
+      // price: { min_price: 20, max_price: 100 },
+      // gender: 'unisex',
+    },
+  },
+};
+```
+
+### 5. Start the Development Server
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) and start chatting!
 
 ## How It Works
 
-- `lib/lm.ts` wraps the Anthropic adapter from AI SDK, pulling credentials from environment variables.
-- `agent/chat-agent.ts` defines a `ToolLoopAgent` with a concise shopping assistant system prompt. Swap the prompt or provide tools as needed.
-- `app/api/chat/route.ts` handles POST requests using `createAgentUIStreamResponse`, enabling streamed UI updates and runtime model overrides.
-- `app/page.tsx` composes AI Elements (Panel, PromptInput, Message, ModelSelector, Loader) with shadcn/ui primitives (Card, ScrollArea, Separator, Button) to render the chat experience.
+The chatbot is built around a few key files:
 
-## Customization Tips
+- **`agent/tools/channel3.ts`** - Defines the `searchProducts` tool that queries Channel3's API
+- **`agent/chat-agent.ts`** - Creates a `ToolLoopAgent` that uses the searchProducts tool
+- **`agent/system-prompt.ts`** - System instructions that guide the AI's behavior
+- **`app/api/chat/route.ts`** - API route that handles chat requests and streams responses
+- **`app/page.tsx`** - Main UI that renders the chat interface with product carousels
 
-- **Update default instructions**: edit `chatAgentInstructions` in `agent/chat-agent.ts`.
-- **Change the model list**: modify the `MODELS` array in `app/page.tsx`. Setting `LLM_MODEL` ensures the server-side agent matches the selected default.
-- **Add tools or structured output**: extend `chatAgent` with AI SDK 6 features like tool calling, approval, or `Output.object`.
-- **Persist conversations**: wire `useChat` up to your own storage or add middleware in the API route. The template currently keeps messages in memory only.
+When a user asks about products, the AI agent automatically calls the `searchProducts` tool, which queries Channel3. Results are displayed in an interactive carousel above the AI's response.
+
+## Advanced Customization
+
+### Channel3 Search Filters
+
+You can add advanced filters to narrow down product search results in `app/app-config.ts`:
+
+```typescript
+search: {
+  filters: {
+    brand_ids: ['brand-123', 'brand-456'], // Limit to specific brands
+    category_ids: ['category-789'], // Filter by categories
+    gender: 'unisex', // 'male', 'female', or 'unisex'
+    price: { min_price: 20, max_price: 100 }, // Price range
+    availability: ['InStock', 'PreOrder'], // Stock status
+    condition: 'new', // 'new', 'refurbished', or 'used'
+    website_ids: ['website-456'], // Limit to specific retailers
+    exclude_product_ids: ['prod-123'], // Exclude specific products
+  },
+}
+```
+
+See the [Channel3 API documentation](https://docs.trychannel3.com) for all available filters and options.
 
 ## Deployment
 
-Deploy to Vercel for the best Gateway + Edge support:
+Deploy to Vercel:
 
 ```bash
 pnpm run build
+vercel
 ```
 
-Ensure the production environment is configured with the same variables (`ANTHROPIC_API_KEY`, `LLM_MODEL`).
+Make sure to add your environment variables (`CHANNEL3_API_KEY`, `LLM_API_KEY`, `LLM_MODEL`) in your Vercel project settings.
+
+## Learn More
+
+- [Channel3 Documentation](https://docs.trychannel3.com)
+- [Vercel AI SDK](https://ai-sdk.dev)
+- [AI Elements](https://github.com/vercel/ai-elements)
