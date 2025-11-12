@@ -29,7 +29,7 @@ Click any product to view detailed information, pricing, variants, and more:
 - **[pnpm](https://pnpm.io/)** (or npm/yarn)
 - **API Keys:**
   - [Channel3 API key](https://trychannel3.com) for product search
-  - [Vercel AI Gateway API key](https://vercel.com/docs/ai-gateway) (or use BYOK with your own provider keys)
+  - [Vercel AI Gateway API key](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai&title=Go+to+AI+Gateway) (or use BYOK with your own provider keys)
 
 ## Quick Start
 
@@ -52,7 +52,7 @@ Then add your API keys:
 | Variable               | Required | Description                                                                    |
 | ---------------------- | -------- | ------------------------------------------------------------------------------ |
 | `CHANNEL3_API_KEY`     | ✅       | Your Channel3 API key ([get one here](https://trychannel3.com))              |
-| `AI_GATEWAY_API_KEY`   | ✅       | Vercel AI Gateway API key ([get started](https://vercel.com/docs/ai-gateway/getting-started)) |
+| `AI_GATEWAY_API_KEY`   | ✅       | Vercel AI Gateway API key ([get started](https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai&title=Go+to+AI+Gateway)) |
 
 **Advanced:** For alternative authentication methods like [BYOK](https://vercel.com/docs/ai-gateway/byok) or [OIDC tokens](https://vercel.com/docs/ai-gateway/authentication), see the [AI Gateway docs](https://vercel.com/docs/ai-gateway).
 
