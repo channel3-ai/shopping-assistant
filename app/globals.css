@@ -86,41 +86,41 @@
   --sidebar-ring: oklch(0.708 0 0);
   
   /* Chat content padding */
-  --chat-padding: 1rem;
+  --chat-padding: 2rem;
   --chat-bottom-spacing: 10rem;
 }
 
 @media (min-width: 640px) {
   :root {
-    --chat-padding: 2rem;
+    --chat-padding: 4rem;
     --chat-bottom-spacing: 12rem;
   }
 }
 
 @media (min-width: 768px) {
   :root {
-    --chat-padding: 4rem;
+    --chat-padding: 6rem;
     --chat-bottom-spacing: 14rem;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --chat-padding: 8rem;
+    --chat-padding: 12rem;
     --chat-bottom-spacing: 16rem;
   }
 }
 
 @media (min-width: 1280px) {
   :root {
-    --chat-padding: 12rem;
+    --chat-padding: 16rem;
     --chat-bottom-spacing: 18rem;
   }
 }
 
 @media (min-width: 1536px) {
   :root {
-    --chat-padding: 16rem;
+    --chat-padding: 20rem;
     --chat-bottom-spacing: 20rem;
   }
 }
