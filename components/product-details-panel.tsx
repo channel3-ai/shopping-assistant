@@ -13,7 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { cn } from '@/lib/utils';
+import { cn, formatCurrency, formatCamelCase } from '@/lib/utils';
 
 type ProductDetailsPanelProps = {
   productId: string | null;
@@ -287,12 +287,12 @@ export function ProductDetailsPanel({
                 {product?.price && (
                   <>
                     <span className="text-2xl font-bold text-foreground">
-                      {product.price.currency}{product.price.price.toFixed(2)}
+                      {formatCurrency(product.price.currency, product.price.price)}
                     </span>
                     {product.price.compare_at_price &&
                       product.price.compare_at_price > product.price.price && (
                         <span className="text-sm text-muted-foreground line-through">
-                          {product.price.currency}{product.price.compare_at_price.toFixed(2)}
+                          {formatCurrency(product.price.currency, product.price.compare_at_price)}
                         </span>
                       )}
                   </>
@@ -301,7 +301,7 @@ export function ProductDetailsPanel({
               <div className="flex flex-wrap gap-2">
                 {product?.availability && (
                   <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                    {product.availability}
+                    {formatCamelCase(product.availability)}
                   </span>
                 )}
                 {product?.gender && (

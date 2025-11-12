@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { cn, formatCurrency } from '@/lib/utils';
 
 export type ProductCardProps = {
   product: Channel3Product;
@@ -84,8 +84,7 @@ export function ProductCard({ onClick, product }: ProductCardProps) {
         <CardTitle className="text-xs line-clamp-2">{title}</CardTitle>
         {priceInfo && (
           <p className="text-sm font-semibold">
-            {priceInfo.currency}
-            {priceInfo.price.toFixed(2)}
+            {formatCurrency(priceInfo.currency, priceInfo.price)}
           </p>
         )}
       </CardHeader>
