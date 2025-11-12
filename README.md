@@ -6,11 +6,12 @@ A simple AI chatbot built with Next.js and the Vercel AI SDK that uses [Channel3
 
 **Key Features:**
 - 🛍️ Natural language product search powered by Channel3
+- 💰 **Built-in monetization** - Channel3 handles affiliate tracking and revenue sharing automatically
 - 💬 Streaming chat responses using AI SDK 6 (beta)
 - 🎨 Beautiful UI with AI Elements and shadcn/ui components
 - ⚡ Fast Edge runtime for low-latency responses
 
-## Screenshots
+## Images
 
 ### Product Search Results
 Ask about any product and see results displayed in an interactive carousel:
@@ -121,6 +122,15 @@ The chatbot is built around a few key files:
 
 When a user asks about products, the AI agent automatically calls the `searchProducts` tool, which queries Channel3. Results are displayed in an interactive carousel above the AI's response.
 
+### Monetization
+
+Channel3 provides **built-in monetization** for your shopping assistant. When users click through to purchase products, Channel3 automatically:
+- Tracks affiliate conversions using their integrated affiliate network
+- Handles commission payouts directly to you
+- Provides analytics on clicks, conversions, and revenue
+
+No need to set up separate affiliate accounts or tracking pixels - it's all included with your Channel3 API key.
+
 ## Advanced Customization
 
 ### Channel3 Search Filters
@@ -146,17 +156,11 @@ See the [Channel3 API documentation](https://docs.trychannel3.com) for all avail
 
 ## Deployment
 
-Deploy to Vercel:
+This app is optimized for deployment on [Vercel](https://vercel.com). See the [Next.js deployment documentation](https://vercel.com/docs/frameworks/full-stack/nextjs) for complete setup instructions.
 
-```bash
-pnpm run build
-vercel
-```
-
-Make sure to add your environment variables (`CHANNEL3_API_KEY`, `LLM_API_KEY`, `LLM_MODEL`) in your Vercel project settings.
+When deploying, make sure to add your environment variables (`CHANNEL3_API_KEY`, `LLM_API_KEY`, `LLM_MODEL`) in your Vercel project settings.
 
 ## Learn More
 
 - [Channel3 Documentation](https://docs.trychannel3.com)
 - [Vercel AI SDK](https://ai-sdk.dev)
-- [AI Elements](https://github.com/vercel/ai-elements)
