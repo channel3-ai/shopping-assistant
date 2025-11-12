@@ -55,26 +55,22 @@ Then add your API keys:
 | `LLM_API_KEY`       | ✅       | API key for your LLM provider (e.g., Anthropic, OpenAI)                   |
 | `LLM_MODEL`         | ✅       | Model identifier (e.g., `claude-3-5-sonnet-latest`, `gpt-4o`)             |
 
-### 3. Select Your LLM Provider
+### 3. Configure Your App
 
-Open `lib/lm.ts` and uncomment your preferred LLM provider:
-
-```typescript
-// Choose ONE of the following:
-return createAnthropic({ apiKey: process.env.LLM_API_KEY })(modelId);
-// return createOpenAI({ apiKey: process.env.LLM_API_KEY })(modelId);
-// return xai(modelId);
-// return groq(modelId);
-```
-
-Make sure your `LLM_API_KEY` and `LLM_MODEL` in `.env.local` match your chosen provider.
-
-### 4. Configure Your Agent (Optional)
-
-Customize the agent's behavior, UI text, and search filters in `app/app-config.ts`:
+Customize everything in one place: `app/app-config.ts`. This includes your LLM provider, agent behavior, UI text, theme colors, and search filters:
 
 ```typescript
 export const appConfig = {
+  // 1. Choose your LLM provider (uncomment ONE):
+  model: {
+    getLanguageModel: (modelId: string) => {
+      return createAnthropic({ apiKey: process.env.LLM_API_KEY })(modelId);
+      // return createOpenAI({ apiKey: process.env.LLM_API_KEY })(modelId);
+      // return xai(modelId);
+      // return groq(modelId);
+    },
+  },
+  // 2. Customize metadata, UI text, and agent behavior:
   metadata: {
     title: 'Your App Title',
     description: 'Your app description',
@@ -91,9 +87,9 @@ export const appConfig = {
   agent: {
     instructions: 'Your agent personality and instructions...',
   },
+  // 3. Add Channel3 search filters:
   search: {
     filters: {
-      // Add Channel3 search filters here
       availability: ['InStock', 'PreOrder'],
       // price: { min_price: 20, max_price: 100 },
       // gender: 'unisex',
@@ -102,7 +98,9 @@ export const appConfig = {
 };
 ```
 
-### 5. Start the Development Server
+Make sure your `LLM_API_KEY` and `LLM_MODEL` in `.env.local` match your chosen provider.
+
+### 4. Start the Development Server
 
 ```bash
 pnpm dev
@@ -114,6 +112,7 @@ Open [http://localhost:3000](http://localhost:3000) and start chatting!
 
 The chatbot is built around a few key files:
 
+- **`app/app-config.ts`** - Single configuration file for LLM provider, agent behavior, UI text, and search filters
 - **`agent/tools/channel3.ts`** - Defines the `searchProducts` tool that queries Channel3's API
 - **`agent/chat-agent.ts`** - Creates a `ToolLoopAgent` that uses the searchProducts tool
 - **`agent/system-prompt.ts`** - System instructions that guide the AI's behavior
