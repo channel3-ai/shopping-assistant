@@ -1,23 +1,12 @@
-import { createAnthropic } from '@ai-sdk/anthropic';
-import { createOpenAI } from '@ai-sdk/openai';
-import { xai } from '@ai-sdk/xai';
-import { groq } from '@ai-sdk/groq';
-
 export const appConfig = {
   // Language model configuration
-  // Comment out the model you want to use.
-  // Make sure you have the corresponding API Key in your environment variables.
-  // For all model options, see: https://ai-sdk.dev/providers/ai-sdk-providers
-  model: {
-    getLanguageModel: (modelId: string) => {
-      // return groq(modelId);
-      // return xai(modelId);
-      // return createOpenAI({
-      return createAnthropic({
-        apiKey: process.env.LLM_API_KEY,
-      })(modelId);
-    },
-  },
+  // Using Vercel AI Gateway for unified API access to multiple providers
+  // Use provider/model format, e.g.:
+  // - 'anthropic/claude-haiku-4.5'
+  // - 'openai/gpt-5'
+  // - 'google/gemini-2.5-flash-lite'
+  // For all model options, see: http://vercel.com/ai-gateway/models
+  model: 'anthropic/claude-haiku-4.5',
   // Metadata values for the browser tab + SEO.
   metadata: {
     title: 'Gift Genius - Your Holiday Gift Assistant',
@@ -64,49 +53,49 @@ export const appConfig = {
       // exclude_product_ids: null, // Array of product IDs to exclude
     },
   },
-  // Theme colors, light vs dark matches the user's system preference
+  // Theme colors
   theme: {
     light: {
-      background: '#f0f9ff',
-      foreground: '#0c4a6e',
+      background: '#f8fafc',
+      foreground: '#1e3a5f',
       card: '#ffffff',
-      cardForeground: '#0c4a6e',
-      primary: '#0284c7',
-      primaryForeground: '#f0f9ff',
+      cardForeground: '#1e3a5f',
+      primary: '#0ea5e9',
+      primaryForeground: '#ffffff',
       secondary: '#e0f2fe',
-      secondaryForeground: '#075985',
+      secondaryForeground: '#0c4a6e',
       accent: '#bae6fd',
       accentForeground: '#075985',
       muted: '#f1f5f9',
-      mutedForeground: '#64748b',
-      border: '#bae6fd',
+      mutedForeground: '#475569',
+      border: '#cbd5e1',
       input: '#e0f2fe',
       inputBackground: '#ffffff',
       ring: '#0ea5e9',
       header: '#ffffff',
-      headerForeground: '#0c4a6e',
-      headerBorder: '#bae6fd',
+      headerForeground: '#1e3a5f',
+      headerBorder: '#cbd5e1',
     },
     dark: {
-      background: '#0a1612',
-      foreground: '#e8f5f0',
-      card: '#0f1f1a',
-      cardForeground: '#e8f5f0',
-      primary: '#c94a4a',
-      primaryForeground: '#ffffff',
-      secondary: '#1e3329',
-      secondaryForeground: '#e8f5f0',
-      accent: '#2d4a3d',
-      accentForeground: '#e8f5f0',
-      muted: '#1a2b23',
-      mutedForeground: '#8fa89a',
-      border: '#2d4a3d',
-      input: '#1a2b23',
-      inputBackground: '#0f1f1a',
-      ring: '#c94a4a',
-      header: '#0f1f1a',
-      headerForeground: '#e8f5f0',
-      headerBorder: '#2d4a3d',
+      background: '#0f172a',
+      foreground: '#e1effe',
+      card: '#1e293b',
+      cardForeground: '#e1effe',
+      primary: '#38bdf8',
+      primaryForeground: '#0f172a',
+      secondary: '#1e3a5f',
+      secondaryForeground: '#bae6fd',
+      accent: '#075985',
+      accentForeground: '#bae6fd',
+      muted: '#1e293b',
+      mutedForeground: '#94a3b8',
+      border: '#334155',
+      input: '#1e293b',
+      inputBackground: '#1e293b',
+      ring: '#38bdf8',
+      header: '#1e293b',
+      headerForeground: '#e1effe',
+      headerBorder: '#334155',
     },
   },
 } as const;

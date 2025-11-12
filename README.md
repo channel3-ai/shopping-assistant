@@ -29,7 +29,7 @@ Click any product to view detailed information, pricing, variants, and more:
 - **[pnpm](https://pnpm.io/)** (or npm/yarn)
 - **API Keys:**
   - [Channel3 API key](https://trychannel3.com) for product search
-  - LLM provider API key (Anthropic, OpenAI, xAI, or Groq)
+  - [Vercel AI Gateway API key](https://vercel.com/docs/ai-gateway) (or use BYOK with your own provider keys)
 
 ## Quick Start
 
@@ -49,27 +49,21 @@ cp .env.example .env.local
 
 Then add your API keys:
 
-| Variable            | Required | Description                                                                 |
-| ------------------- | -------- | --------------------------------------------------------------------------- |
-| `CHANNEL3_API_KEY`  | ✅       | Your Channel3 API key ([get one here](https://trychannel3.com))           |
-| `LLM_API_KEY`       | ✅       | API key for your LLM provider (e.g., Anthropic, OpenAI)                   |
-| `LLM_MODEL`         | ✅       | Model identifier (e.g., `claude-3-5-sonnet-latest`, `gpt-4o`)             |
+| Variable               | Required | Description                                                                    |
+| ---------------------- | -------- | ------------------------------------------------------------------------------ |
+| `CHANNEL3_API_KEY`     | ✅       | Your Channel3 API key ([get one here](https://trychannel3.com))              |
+| `AI_GATEWAY_API_KEY`   | ✅       | Vercel AI Gateway API key ([get started](https://vercel.com/docs/ai-gateway/getting-started)) |
+
+**Advanced:** For alternative authentication methods like [BYOK](https://vercel.com/docs/ai-gateway/byok) or [OIDC tokens](https://vercel.com/docs/ai-gateway/authentication), see the [AI Gateway docs](https://vercel.com/docs/ai-gateway).
 
 ### 3. Configure Your App
 
-Customize everything in one place: `app/app-config.ts`. This includes your LLM provider, agent behavior, UI text, theme colors, and search filters:
+Customize everything in one place: `app/app-config.ts`:
 
 ```typescript
 export const appConfig = {
-  // 1. Choose your LLM provider (uncomment ONE):
-  model: {
-    getLanguageModel: (modelId: string) => {
-      return createAnthropic({ apiKey: process.env.LLM_API_KEY })(modelId);
-      // return createOpenAI({ apiKey: process.env.LLM_API_KEY })(modelId);
-      // return xai(modelId);
-      // return groq(modelId);
-    },
-  },
+  // 1. Choose your model (using AI Gateway provider/model format):
+  model: 'anthropic/claude-3-5-sonnet-20241022',
   // 2. Customize metadata, UI text, and agent behavior:
   metadata: {
     title: 'Your App Title',
@@ -87,7 +81,7 @@ export const appConfig = {
   agent: {
     instructions: 'Your agent personality and instructions...',
   },
-  // 3. Add Channel3 search filters:
+  // 3. Add Channel3 search filters (optional):
   search: {
     filters: {
       availability: ['InStock', 'PreOrder'],
@@ -98,7 +92,7 @@ export const appConfig = {
 };
 ```
 
-Make sure your `LLM_API_KEY` and `LLM_MODEL` in `.env.local` match your chosen provider.
+This app uses [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) for unified access to all AI providers with built-in monitoring, budgets, and fallbacks.
 
 ### 4. Start the Development Server
 
