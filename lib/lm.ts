@@ -14,6 +14,6 @@ export function getLanguageModel(modelId: string) {
   // const xai = createXai({
   // return createOpenAI({
   return createAnthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
+    apiKey: process.env.LLM_API_KEY,
   })(modelId);
 }
