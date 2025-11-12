@@ -28,7 +28,7 @@ import {
   PromptInputTools,
   usePromptInputAttachments,
 } from '@ai-elements/prompt-input';
-import { ImageIcon, SquarePen } from 'lucide-react';
+import { ImageIcon, SearchIcon, SquarePen } from 'lucide-react';
 import { PoweredByChannel3 } from '@/components/powered-by-channel3';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { ProductCarousel, type ProductCarouselProps } from '@/components/product-carousel';
@@ -41,51 +41,84 @@ import { appConfig } from './app-config';
 function renderMessageParts(
   parts: UIMessage['parts'],
   onProductClick?: (product: Channel3Product) => void,
+  isStreaming?: boolean,
 ): ReactNode[] {
   const renderedParts: ReactNode[] = [];
   const aggregatedProducts: ProductCarouselProps['products'] = [];
+  const textAndOtherParts: ReactNode[] = [];
 
   parts.forEach((part, index) => {
   if (part.type === 'text') {
-      renderedParts.push(
+      textAndOtherParts.push(
         <MessageResponse key={`text-${index}`}>{part.text}</MessageResponse>,
       );
       return;
   }
 
   if (part.type === 'file') {
-      renderedParts.push(<MessageAttachment key={`file-${index}`} data={part} />);
+      textAndOtherParts.push(<MessageAttachment key={`file-${index}`} data={part} />);
       return;
   }
 
   if (part.type === 'tool-searchProducts') {
-    if (part.state === 'output-available') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const input = part.input as any;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const output = part.output as any;
-      if (Array.isArray(output) && output.length > 0) {
-          aggregatedProducts.push(...output);
+      
+      const query = input?.query;
+      const imageUrl = input?.imageUrl;
+      
+      // Determine if task should be open (during search) or collapsed (after results)
+      const hasResults = part.state === 'output-available' && Array.isArray(output);
+      const resultCount = hasResults ? output.length : 0;
+      
+      // Build title based on state
+      let title = '';
+      if (hasResults) {
+        // After search completes, show result count
+        if (query) {
+          title = `Found ${resultCount} result${resultCount !== 1 ? 's' : ''} for "${query}"`;
+        } else if (imageUrl) {
+          title = `Found ${resultCount} result${resultCount !== 1 ? 's' : ''} by image`;
+        } else {
+          title = `Found ${resultCount} result${resultCount !== 1 ? 's' : ''}`;
         }
-        return;
+      } else {
+        // While searching (any state before output-available), don't show result count
+        if (query) {
+          title = `Searching for "${query}"`;
+        } else if (imageUrl) {
+          title = 'Searching by image';
+        } else {
+          title = 'Searching products';
+        }
       }
-
-    if (part.state === 'input-available') {
-        renderedParts.push(
-          <div key={`search-loading-${index}`} className="text-sm text-muted-foreground">
-          Searching products...
-          </div>,
+      
+      textAndOtherParts.push(
+        <div key={`task-${part.toolCallId}-${index}`} className="flex items-center gap-2 text-muted-foreground text-sm mb-2">
+          <SearchIcon className="size-4" />
+          <span>{title}</span>
+        </div>
       );
-    }
+      
+      // Aggregate products for display at the beginning
+      if (hasResults && output.length > 0) {
+        aggregatedProducts.push(...output);
+      }
+      
       return;
     }
   });
 
+  // Render all aggregated products in a single carousel at the beginning
   if (aggregatedProducts.length > 0) {
     const dedupedProducts: ProductCarouselProps['products'] = [];
     const seen = new Set<string>();
 
-    aggregatedProducts.forEach((product, index) => {
+    aggregatedProducts.forEach((product: Channel3Product, productIndex: number) => {
       const identifier =
-        product.id ?? `${product.title ?? 'product'}-${index.toString()}`;
+        product.id ?? `${product.title ?? 'product'}-${productIndex.toString()}`;
       if (seen.has(identifier)) {
         return;
       }
@@ -95,12 +128,15 @@ function renderMessageParts(
 
     renderedParts.push(
       <ProductCarousel
-        key="searchProducts"
+        key="all-products"
         products={dedupedProducts}
         onProductClick={onProductClick}
       />,
     );
   }
+
+  // Add text and other parts after the carousel
+  renderedParts.push(...textAndOtherParts);
 
   return renderedParts;
 }
@@ -208,13 +244,18 @@ export default function Page() {
               />
             ) : (
               <>
-                {filteredMessages.map((message) => (
-                  <Message key={message.id} from={message.role}>
-                    <MessageContent>
-                      {renderMessageParts(message.parts, handleProductSelect)}
-                    </MessageContent>
-                  </Message>
-                ))}
+                {filteredMessages.map((message, messageIndex) => {
+                  const isLastMessage = messageIndex === filteredMessages.length - 1;
+                  const isMessageStreaming = isLoading && isLastMessage;
+                  
+                  return (
+                    <Message key={`${message.id}-${messageIndex}`} from={message.role}>
+                      <MessageContent>
+                        {renderMessageParts(message.parts, handleProductSelect, isMessageStreaming)}
+                      </MessageContent>
+                    </Message>
+                  );
+                })}
                 {shouldShowLoader && <Loader className="ml-2 text-muted-foreground" />}
                 {error && <ErrorDisplay message={error.message} />}
               </>
