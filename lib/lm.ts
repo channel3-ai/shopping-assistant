@@ -1,10 +1,19 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
+import { createOpenAI } from '@ai-sdk/openai';
+import { xai } from '@ai-sdk/xai';
+import { groq } from '@ai-sdk/groq';
 
-const anthropic = createAnthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+/*
+Comment out the model you want to use. 
+Make sure you have the corresponding API Key in your environment variables.
+For all model options, see: https://ai-sdk.dev/providers/ai-sdk-providers
+*/
 
 export function getLanguageModel(modelId: string) {
-  return anthropic(modelId);
+  // return groq(modelId);
+  // const xai = createXai({
+  // return createOpenAI({
+  return createAnthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  })(modelId);
 }
-

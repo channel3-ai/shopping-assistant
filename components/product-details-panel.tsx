@@ -228,47 +228,47 @@ export function ProductDetailsPanel({
         aria-modal="true"
         aria-labelledby="product-details-title"
       >
-        {/* Image Carousel at Top */}
-        {displayImages.length > 0 && (
-          <div className="shrink-0 border-b border-border/70">
-            {displayImages.length === 1 ? (
-              <div className="relative aspect-square overflow-hidden bg-muted">
-                <img
-                  src={displayImages[0]}
-                  alt={product?.title ?? 'Product image'}
-                  className="size-full object-cover"
-                />
-              </div>
-            ) : (
-              <Carousel
-                opts={{
-                  align: 'start',
-                  loop: true,
-                }}
-                className="w-full"
-              >
-                <CarouselContent>
-                  {displayImages.map((image, index) => (
-                    <CarouselItem key={`${image}-${index}`}>
-                      <div className="relative aspect-square overflow-hidden bg-muted">
-                        <img
-                          src={image}
-                          alt={`${product?.title ?? 'Product'} image ${index + 1}`}
-                          className="size-full object-cover"
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="left-2" />
-                <CarouselNext className="right-2" />
-              </Carousel>
-            )}
-          </div>
-        )}
-
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto">
+          {/* Image Carousel at Top */}
+          {displayImages.length > 0 && (
+            <div className="border-b border-border/70">
+              {displayImages.length === 1 ? (
+                <div className="relative aspect-square overflow-hidden bg-muted">
+                  <img
+                    src={displayImages[0]}
+                    alt={product?.title ?? 'Product image'}
+                    className="size-full object-cover"
+                  />
+                </div>
+              ) : (
+                <Carousel
+                  opts={{
+                    align: 'start',
+                    loop: true,
+                  }}
+                  className="w-full"
+                >
+                  <CarouselContent>
+                    {displayImages.map((image, index) => (
+                      <CarouselItem key={`${image}-${index}`}>
+                        <div className="relative aspect-square overflow-hidden bg-muted">
+                          <img
+                            src={image}
+                            alt={`${product?.title ?? 'Product'} image ${index + 1}`}
+                            className="size-full object-cover"
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-2" />
+                  <CarouselNext className="right-2" />
+                </Carousel>
+              )}
+            </div>
+          )}
+
           <div className="p-6 space-y-6">
             {/* Header Info */}
             <div className="space-y-2">
