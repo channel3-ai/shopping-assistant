@@ -2,6 +2,7 @@ import { tool } from 'ai';
 import { z } from 'zod';
 import Channel3 from '@channel3/sdk';
 import { appConfig } from '@/app/app-config';
+import { resolveBase64Image } from '@/lib/image-attachments';
 
 /**
  * Channel3 API Type Definitions
@@ -71,20 +72,22 @@ const channel3Client = new Channel3();
 
 export const searchProducts = tool({
   description:
-    'Search for fashion and apparel products using text or image URL. Returns ranked matches.',
+    'Search for fashion and apparel products using text, image URL, or base64 image. Returns ranked matches.',
   inputSchema: z
     .object({
       query: z.string().optional().describe('Search query text'),
-      imageUrl: z.url().optional().describe('Image URL for visual search'),
+      imageUrl: z.url().optional().describe('Image URL for visual search (http/https URLs only)'),
+      base64Image: z.string().optional().describe('Base64 encoded image for visual search. If prefixed with "image:", the value is treated as a stored pointer.'),
       limit: z.number().int().min(1).max(50).optional().describe('Maximum number of results to return'),
     })
     .refine(
-      (data) => data.query || data.imageUrl,
-      'Provide either query or imageUrl',
+      (data) => data.query || data.imageUrl || data.base64Image,
+      'Provide at least one of: query, imageUrl, or base64Image',
     ),
   execute: async ({ 
     query, 
-    imageUrl, 
+    imageUrl,
+    base64Image,
     limit = 20,
   }) => {
     // Build filters object from config - these are automatically applied to all searches
@@ -94,13 +97,20 @@ export const searchProducts = tool({
       availability: appConfig.search.filters.availability ? [...appConfig.search.filters.availability] : undefined,
     };
 
-    const response = await channel3Client.search.perform({
+    const cleanBase64 = resolveBase64Image(base64Image);
+
+    try {
+      const response = await channel3Client.search.perform({
         query,
         image_url: imageUrl,
+        base64_image: cleanBase64,
         limit,
         filters,
-    });
+      });
 
-    return response;
+      return response;
+    } catch (error) {
+      throw error;
+    }
   },
 });

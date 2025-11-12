@@ -121,6 +121,16 @@ The chatbot is built around a few key files:
 
 When a user asks about products, the AI agent automatically calls the `searchProducts` tool, which queries Channel3. Results are displayed in an interactive carousel above the AI's response.
 
+### Image Search
+
+Users can upload images to search for similar products. Due to a limitation in the AI SDK where large tool parameters (like base64 images) get truncated, we use a pointer-based workaround:
+
+1. Image data is stored server-side with a unique ID (`lib/image-attachments.ts`)
+2. The agent receives a short pointer string (e.g., `"image:abc123"`)
+3. The tool resolves the pointer back to the full base64 data
+
+This pattern is encapsulated in `lib/image-attachments.ts` and can be reused for any tool that needs to handle large data payloads. For more details, see the [AI SDK issue](https://github.com/vercel/ai/issues/10179).
+
 ### Monetization
 
 Channel3 provides **built-in monetization** for your shopping assistant. When users click through to purchase products, Channel3 automatically:

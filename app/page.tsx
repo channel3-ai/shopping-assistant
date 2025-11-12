@@ -68,6 +68,8 @@ function renderMessageParts(
       
       const query = input?.query;
       const imageUrl = input?.imageUrl;
+      const base64Image = input?.base64Image;
+      const hasImage = imageUrl || base64Image;
       
       // Determine if task should be open (during search) or collapsed (after results)
       const hasResults = part.state === 'output-available' && Array.isArray(output);
@@ -79,7 +81,7 @@ function renderMessageParts(
         // After search completes, show result count
         if (query) {
           title = `Found ${resultCount} result${resultCount !== 1 ? 's' : ''} for "${query}"`;
-        } else if (imageUrl) {
+        } else if (hasImage) {
           title = `Found ${resultCount} result${resultCount !== 1 ? 's' : ''} by image`;
         } else {
           title = `Found ${resultCount} result${resultCount !== 1 ? 's' : ''}`;
@@ -88,7 +90,7 @@ function renderMessageParts(
         // While searching (any state before output-available), don't show result count
         if (query) {
           title = `Searching for "${query}"`;
-        } else if (imageUrl) {
+        } else if (hasImage) {
           title = 'Searching by image';
         } else {
           title = 'Searching products';
