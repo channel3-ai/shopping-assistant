@@ -9,7 +9,7 @@ import {
   ConversationContent,
   ConversationEmptyState,
 } from '@ai-elements/conversation';
-import { Loader } from '@ai-elements/loader';
+import { Shimmer } from '@ai-elements/shimmer';
 import {
   Message,
   MessageAttachment,
@@ -200,11 +200,6 @@ export default function Page() {
   }, []);
 
   const isLoading = status === 'streaming' || status === 'submitted';
-  const shouldShowLoader = useMemo(() => {
-    if (!isLoading) return false;
-    const lastMessage = filteredMessages[filteredMessages.length - 1];
-    return !lastMessage?.parts?.length;
-  }, [isLoading, filteredMessages]);
 
   return (
     <div className="chat-container">
@@ -275,7 +270,13 @@ export default function Page() {
                     </Message>
                   );
                 })}
-                {shouldShowLoader && <Loader className="ml-2 text-muted-foreground" />}
+                {isLoading && (
+                  <Message from="assistant">
+                    <MessageContent>
+                      <Shimmer className="text-muted-foreground">Thinking...</Shimmer>
+                    </MessageContent>
+                  </Message>
+                )}
                 {error && <ErrorDisplay message={error.message} />}
               </>
             )}
