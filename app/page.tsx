@@ -208,12 +208,31 @@ export default function Page() {
 
   return (
     <div className="chat-container">
-      <header className="chat-header">
-        <PoweredByChannel3 />
-        <div className="chat-header-center">
-          <h1 className="text-xl font-semibold tracking-tight">{appConfig.ui.header.title}</h1>
-          <p className="text-sm opacity-75">{appConfig.ui.header.subtitle}</p>
-        </div>
+      {filteredMessages.length > 0 && (
+        <header className="chat-top-header">
+          <h1 className="text-lg font-semibold">{appConfig.ui.emptyState.title}</h1>
+          <div className="chat-header-actions">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleNewChat}
+                  disabled={isLoading}
+                  aria-label="New chat"
+                >
+                  <SquarePen className="size-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>New chat</p>
+              </TooltipContent>
+            </Tooltip>
+            <ThemeToggle />
+          </div>
+        </header>
+      )}
+      {filteredMessages.length === 0 && (
         <div className="chat-header-actions">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -233,7 +252,7 @@ export default function Page() {
           </Tooltip>
           <ThemeToggle />
         </div>
-      </header>
+      )}
       <div className="chat-body">
         <Conversation>
           <ConversationContent>
@@ -278,6 +297,9 @@ export default function Page() {
             <PromptInputSubmit status={status} />
           </PromptInputFooter>
         </PromptInput>
+        <div className="chat-footer">
+          <PoweredByChannel3 />
+        </div>
       </div>
       <ProductDetailsPanel
         isOpen={isProductPanelOpen}

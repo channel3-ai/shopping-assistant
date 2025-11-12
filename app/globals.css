@@ -175,38 +175,38 @@
 @layer components {
   /* Chat Layout */
   .chat-container {
-    @apply flex h-screen w-screen flex-col;
+    @apply flex h-screen w-screen flex-col relative;
   }
 
-  .chat-header {
-    @apply grid grid-cols-[auto_1fr_auto] items-center gap-4 px-6 py-4;
+  .chat-top-header {
+    @apply flex items-center justify-between px-6 py-3 z-30;
     background-color: var(--header);
     color: var(--header-foreground);
     border-bottom: 1px solid var(--header-border);
   }
 
-  .chat-header-center {
-    @apply flex flex-col items-center justify-center text-center;
+  .chat-header-actions {
+    @apply absolute top-4 right-6 flex items-center gap-2 z-30 pointer-events-auto;
   }
 
-  .chat-header-actions {
-    @apply flex items-center justify-end gap-2;
+  .chat-top-header .chat-header-actions {
+    @apply relative top-0 right-0;
   }
 
   .powered-by-link {
-    @apply flex flex-col items-start gap-0.5 transition-opacity hover:opacity-80;
+    @apply flex flex-row items-center gap-1.5 transition-opacity hover:opacity-80;
   }
 
   .powered-by-text {
-    @apply text-[10px] text-muted-foreground leading-tight;
+    @apply text-xs text-muted-foreground leading-tight;
   }
 
   .channel3-logo-light {
-    @apply hidden h-12 w-auto dark:block;
+    @apply hidden h-5 w-auto dark:block;
   }
 
   .channel3-logo-dark {
-    @apply block h-12 w-auto dark:hidden;
+    @apply block h-5 w-auto dark:hidden;
   }
 
   .chat-body {
@@ -214,14 +214,18 @@
   }
 
   .chat-input-wrapper {
-    @apply absolute bottom-0 left-0 right-0 py-4 pointer-events-none z-20;
+    @apply absolute bottom-0 left-0 right-0 py-4 pointer-events-none z-20 flex flex-col items-center;
     padding-left: var(--chat-padding);
     padding-right: var(--chat-padding);
   }
 
-  .chat-input-wrapper > * {
-    @apply pointer-events-auto;
+  .chat-input-wrapper > *:not(.chat-footer) {
+    @apply pointer-events-auto max-w-3xl w-full;
     background-color: var(--input-background);
+  }
+
+  .chat-footer {
+    @apply flex justify-center items-center mt-3 pointer-events-auto;
   }
 
   /* Smaller input with tighter spacing */

@@ -7,16 +7,11 @@ export const appConfig = {
   },
   // UI copy used across the chat interface.
   ui: {
-    // Text content for the header section at the top of the chat.
-    header: {
-      title: 'Gift Genius',
-      subtitle: 'Your personal holiday gift expert',
-    },
     // Default empty state shown before the conversation begins.
     emptyState: {
-      title: 'Find the Perfect Gift 🎁',
+      title: 'Gift Agent',
       description:
-        'Tell me about the person you\'re shopping for—their interests, hobbies, age, or the occasion. I\'ll help you discover thoughtful gifts they\'ll love.',
+        'Your personal holiday gift expert. Tell me about the person you\'re shopping for—their interests, hobbies, age, or the occasion. I\'ll help you discover thoughtful gifts they\'ll love.',
     },
     // Placeholder text displayed inside the prompt input.
     input: {
@@ -74,25 +69,25 @@ export const appConfig = {
       headerBorder: '#bae6fd',
     },
     dark: {
-      background: '#020617',
-      foreground: '#e0f2fe',
-      card: '#0f172a',
-      cardForeground: '#e0f2fe',
-      primary: '#38bdf8',
-      primaryForeground: '#020617',
-      secondary: '#1e293b',
-      secondaryForeground: '#e0f2fe',
-      accent: '#334155',
-      accentForeground: '#bae6fd',
-      muted: '#1e293b',
-      mutedForeground: '#94a3b8',
-      border: '#334155',
-      input: '#1e293b',
-      inputBackground: '#0f172a',
-      ring: '#38bdf8',
-      header: '#0f172a',
-      headerForeground: '#e0f2fe',
-      headerBorder: '#334155',
+      background: '#0a1612',
+      foreground: '#e8f5f0',
+      card: '#0f1f1a',
+      cardForeground: '#e8f5f0',
+      primary: '#c94a4a',
+      primaryForeground: '#ffffff',
+      secondary: '#1e3329',
+      secondaryForeground: '#e8f5f0',
+      accent: '#2d4a3d',
+      accentForeground: '#e8f5f0',
+      muted: '#1a2b23',
+      mutedForeground: '#8fa89a',
+      border: '#2d4a3d',
+      input: '#1a2b23',
+      inputBackground: '#0f1f1a',
+      ring: '#c94a4a',
+      header: '#0f1f1a',
+      headerForeground: '#e8f5f0',
+      headerBorder: '#2d4a3d',
     },
   },
 } as const;
